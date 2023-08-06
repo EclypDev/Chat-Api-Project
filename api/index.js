@@ -3,8 +3,9 @@ import Mongoose from "mongoose";
 import Path from "path";
 import "./database/database.js";
 import { doorSchema } from "./database/Schema/Schemas.js";
+import BodyParser from "body-parser";
 import route from "./routes.js";
-import morgan from "morgan";
+import Morgan from "morgan";
 import { fileURLToPath } from "url";
 
 // Utils
@@ -21,9 +22,9 @@ const staticFilePath = Path.join(__dirname, "../web");
 const PORT = process.env.PORT || 3000;
 
 // Middlewares
-APP.use(morgan("dev"));
+APP.use(Morgan("dev"));
+APP.use(BodyParser.json());
 APP.use(route);
-APP.use(Express.json());
 APP.use(Express.static(staticFilePath));
 
 // Starting Server

@@ -52,11 +52,30 @@ function responseMessage(message) {
     area.append(responseDiv);
 }
 
-promptTextSend.addEventListener("click", () => {
-    let message = promptTextArea.value;
-    if (message) {
-        requestMessage(promptTextArea.value);
+promptTextSend.addEventListener("click", async () => {
+    let input = promptTextArea.value;
+    requestMessage(input);
+
+    let prompt = {
+        message: input,
+    };
+    let URI = "http://localhost:3000/api/gpt/";
+    async function postData(url = "", data = {}) {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        return response.json();
     }
+    postData(URI, prompt)
+        .then((res) => {
+            responseMessage(res.response);
+        })
+        .catch((err) => console.log(err));
+    promptTextArea.value = "";
 });
 
 document.addEventListener("DOMContentLoaded", function () {
